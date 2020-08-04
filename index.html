@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>Detector de Face</title>
+    <script src="tracking-min.js"></script>
+    <script src="data/face-min.js"></script>
+    <style>
+        video,
+        canvas {
+            margin-left: 10px;
+            margin-top: 10px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    
+     <video id="video" width="320" height="240" preload autoplay loop muted></video>
+     <canvas id="canvas" width="320" height="240"></canvas>
+
+
+     <script>
+
+        window.onload = function(){
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+
+            var tracker = new tracking.ObjectTracker('face');
+            tracking.track('#video', tracker, {camera: true});
+
+            tracker.on('track', event => {
+                
+                console.log('Procurando por rostos...')
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                event.data.forEach(rect => {
+                    context.strokeStyle = 'blue';
+                    context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                    context.fillStyle = 'red';
+                })
+            
+            
+            });
+
+        }
+
+     </script>
+
+</body>
+</html>
